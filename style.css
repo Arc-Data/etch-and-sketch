@@ -91,3 +91,8 @@ input[type='color'] {
 	color:white;
 	text-transform:uppercase;
 }
+
+footer {
+	padding:20px;
+	text-align:center;
+}
