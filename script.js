@@ -24,7 +24,6 @@ function gridLines(e) {
 }
 
 function mouseHover(e) {
-    console.log(e.target)
     if(e.buttons === 0) {
         e.target.removeEventListener('mouseover', mouseHover);
         return;
@@ -33,13 +32,17 @@ function mouseHover(e) {
 }
 
 function initializeGrid(gridItems) {
+    gridButton.textContent = 'Add Gridlines';
+    while(gridContainer.firstChild) {
+        gridContainer.removeChild(gridContainer.lastChild);
+    }
+
     gridContainer.style.gridTemplateColumns = `repeat(${gridItems}, 1fr)`;
     gridContainer.style.gridTemplateRows = `repeat(${gridItems}, 1fr)`;
 
     for(let i = 0; i < gridItems * gridItems; i++) {
         let gridItem = document.createElement('div');
         gridContainer.appendChild(gridItem);
-        gridItem.classList.add('grid-item');
         gridItem.addEventListener('mousedown', (e) => {
             if(e.button == 0) {
                 e.target.style.background = 'rgb(51,51,51)';
@@ -50,20 +53,14 @@ function initializeGrid(gridItems) {
     }
 }
 
-function resetGrid() {
-    gridButton.textContent = 'Add Gridlines';
-    while(gridContainer.firstChild) {
-        gridContainer.removeChild(gridContainer.lastChild);
-    }
-}
 
-reset.addEventListener('click', resetGrid);
+
+reset.addEventListener('click', initializeGrid(gridSize.value));
 gridButton.addEventListener('click', gridLines);
 gridSlider.addEventListener('input', e => {
     gridSize.textContent = e.target.value + ' x ' + e.target.value;
 })
 gridSlider.addEventListener('change', e => {
-    resetGrid();
     initializeGrid(e.target.value);
 });
 
