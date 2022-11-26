@@ -4,6 +4,7 @@ const reset = document.querySelector('#reset');
 const gridButton = document.querySelector('#gridlines');
 const gridSlider = document.querySelector('#gridSlider');
 const gridSize = document.querySelector('#gridSize');
+const gridColor = document.querySelector('#gridColor');
 
 gridSize.textContent = gridSlider.value + ' x ' + gridSlider.value;
 
@@ -28,10 +29,11 @@ function mouseHover(e) {
         e.target.removeEventListener('mouseover', mouseHover);
         return;
     }
-    e.target.style.background = 'rgb(51,51,51)';
+    e.target.style.background = gridColor.value;
 }
 
-function initializeGrid(gridItems) {
+function initializeGrid() {
+    gridItems = gridSlider.value;
     gridButton.textContent = 'Add Gridlines';
     while(gridContainer.firstChild) {
         gridContainer.removeChild(gridContainer.lastChild);
@@ -45,7 +47,7 @@ function initializeGrid(gridItems) {
         gridContainer.appendChild(gridItem);
         gridItem.addEventListener('mousedown', (e) => {
             if(e.button == 0) {
-                e.target.style.background = 'rgb(51,51,51)';
+                e.target.style.background = gridColor.value;
                 gridContainer.addEventListener("mouseover", mouseHover, {capture:true});
                 e.preventDefault();
             }
@@ -55,14 +57,13 @@ function initializeGrid(gridItems) {
 
 
 
-reset.addEventListener('click', initializeGrid(gridSize.value));
+reset.addEventListener('click', initializeGrid);
+
 gridButton.addEventListener('click', gridLines);
 gridSlider.addEventListener('input', e => {
     gridSize.textContent = e.target.value + ' x ' + e.target.value;
 })
-gridSlider.addEventListener('change', e => {
-    initializeGrid(e.target.value);
-});
+gridSlider.addEventListener('change', initializeGrid)
 
 
 initializeGrid(16);

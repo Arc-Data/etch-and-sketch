@@ -73,3 +73,20 @@ body {
 	font-weight:700;
 }
 
+input[type='color'] {
+	-webkit-appearance:none;
+	border:none;
+	width:100px;
+	height:100px;
+}
+
+ 
+.color-changer {
+
+}
+
+#gridColor {
+	padding:0;
+
+}
+
