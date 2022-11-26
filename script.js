@@ -83,11 +83,28 @@ function initializeGrid() {
     }
 }
 
+function changeActive(btn) {
+    const activeButton = document.querySelector('.active-btn');
+    console.log(btn)
+    console.log(activeButton)
+    activeButton.classList.remove('active-btn');
+    btn.classList.add('active-btn');
+
+}
 
 
-colorButton.addEventListener('click', () => colorMode = 0);
-randomButton.addEventListener('click', () => colorMode = 1);
-eraseButton.addEventListener('click', () => colorMode = 2);
+colorButton.addEventListener('click', (e) => {
+    colorMode = 0;
+    changeActive(e.target);
+});
+randomButton.addEventListener('click', (e) => {
+    colorMode = 1;
+    changeActive(e.target);
+});
+eraseButton.addEventListener('click', (e) => {
+    colorMode = 2;
+    changeActive(e.target);
+});
 reset.addEventListener('click', initializeGrid);
 gridButton.addEventListener('click', gridLines);
 gridSlider.addEventListener('input', e => {
