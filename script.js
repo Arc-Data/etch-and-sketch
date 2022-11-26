@@ -1,17 +1,22 @@
 const sketchBoard = document.querySelector('.sketch-board');
 const gridContainer = document.createElement('div');
-const reset = document.querySelector('#reset');
-const gridButton = document.querySelector('#gridlines');
-const gridSlider = document.querySelector('#gridSlider');
-const gridSize = document.querySelector('#gridSize');
+
 const gridColor = document.querySelector('#gridColor');
+const colorButton = document.querySelector('#color');
+const randomButton = document.querySelector('#random');
+const eraseButton = document.querySelector('#erase');
+const gridButton = document.querySelector('#gridlines');
+const reset = document.querySelector('#reset');
+const gridSize = document.querySelector('#gridSize');
+const gridSlider = document.querySelector('#gridSlider');
 
 gridSize.textContent = gridSlider.value + ' x ' + gridSlider.value;
 
-gridContainer.classList.add('grid-container');
-
+let colorMode = 0;
 
 sketchBoard.appendChild(gridContainer)
+gridContainer.classList.add('grid-container');
+
 
 function gridLines(e) {
     const divs = document.querySelectorAll('.grid-container > div');
@@ -29,15 +34,38 @@ function mouseHover(e) {
         e.target.removeEventListener('mouseover', mouseHover);
         return;
     }
-    e.target.style.background = gridColor.value;
+    e.target.style.background = colorPicker();
 }
 
-function initializeGrid() {
-    gridItems = gridSlider.value;
+function removeGridContents() {
     gridButton.textContent = 'Add Gridlines';
     while(gridContainer.firstChild) {
         gridContainer.removeChild(gridContainer.lastChild);
     }
+}
+
+function randomizeColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return [r, g, b];
+}   
+
+function colorPicker() {
+    switch(colorMode) {
+        case 0:
+            return gridColor.value;
+        case 1:
+            let color = randomizeColor();
+            return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+        case 2:
+            return '#ededed';
+    }
+}
+
+function initializeGrid() {
+    removeGridContents();
+    gridItems = gridSlider.value;
 
     gridContainer.style.gridTemplateColumns = `repeat(${gridItems}, 1fr)`;
     gridContainer.style.gridTemplateRows = `repeat(${gridItems}, 1fr)`;
@@ -47,7 +75,7 @@ function initializeGrid() {
         gridContainer.appendChild(gridItem);
         gridItem.addEventListener('mousedown', (e) => {
             if(e.button == 0) {
-                e.target.style.background = gridColor.value;
+                gridItem.style.background = colorPicker();
                 gridContainer.addEventListener("mouseover", mouseHover, {capture:true});
                 e.preventDefault();
             }
@@ -57,8 +85,10 @@ function initializeGrid() {
 
 
 
+colorButton.addEventListener('click', () => colorMode = 0);
+randomButton.addEventListener('click', () => colorMode = 1);
+eraseButton.addEventListener('click', () => colorMode = 2);
 reset.addEventListener('click', initializeGrid);
-
 gridButton.addEventListener('click', gridLines);
 gridSlider.addEventListener('input', e => {
     gridSize.textContent = e.target.value + ' x ' + e.target.value;
